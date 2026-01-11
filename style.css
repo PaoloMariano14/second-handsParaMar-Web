@@ -1,0 +1,91 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background: #f5f6fa;
+}
+
+header {
+  background: #111;
+  color: white;
+  text-align: center;
+  padding: 12px;
+}
+
+main {
+  display: flex;
+  height: calc(100vh - 70px);
+}
+
+#map {
+  flex: 2;
+}
+
+#list {
+  flex: 1;
+  background: white;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+}
+
+#list h2 {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.place {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.place img {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 6px;
+}
+
+.place button {
+  margin-top: 6px;
+  margin-right: 4px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.visitado {
+  background: #d1f7d6;
+}
+
+.btn {
+  background: #111;
+  color: white;
+}
+
+.btn-danger {
+  background: #c0392b;
+}
+
+.btn-route {
+  background: #2980b9;
+}
+
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+  }
+
+  #list {
+    height: 40%;
+    border-right: none;
+    border-top: 1px solid #ddd;
+  }
+
+  #map {
+    height: 60%;
+  }
+}
