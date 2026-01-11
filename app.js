@@ -1,13 +1,14 @@
 /************************************************
- * 1️⃣ CARGÁ ACÁ TUS SECOND HANDS (opcional)
- * 👉 Podés dejarlo vacío y cargarlos desde el mapa
+ * 1️⃣ SECOND HANDS PRECARGADOS (OPCIONAL)
+ * 👉 Podés dejarlos o borrarlos
  ************************************************/
 const initialPlaces = [
   {
     id: 1,
     name: "Ejemplo Second Hand",
-    note: "Vintage / buena ropa",
+    note: "Ropa vintage y linda",
     photo: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f",
+    address: "Montevideo",
     lat: -34.9011,
     lng: -56.1645,
     visited: false
@@ -24,9 +25,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 const icon = L.icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/892/892458.png',
-  iconSize: [30, 30],
-  iconAnchor: [15, 30]
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/69/69524.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32]
 });
 
 /************************************************
@@ -48,17 +49,19 @@ renderList();
  * 4️⃣ AGREGAR DESDE EL MAPA
  ************************************************/
 map.on('click', e => {
-  const name = prompt("Nombre del second hand 👗");
+  const name = prompt("Nombre del second hand 🏬");
   if (!name) return;
 
   const note = prompt("Nota (opcional)");
   const photo = prompt("URL de foto 📸");
+  const address = prompt("Dirección (ej: 18 de Julio 1234)");
 
   const place = {
     id: Date.now(),
     name,
     note,
     photo,
+    address,
     lat: e.latlng.lat,
     lng: e.latlng.lng,
     visited: false
@@ -78,8 +81,22 @@ function addMarker(place) {
     .addTo(map)
     .bindPopup(`
       <strong>${place.name}</strong><br>
-      ${place.note || ""}
-      ${place.photo ? `<img src="${place.photo}" style="width:100%;border-radius:8px;margin-top:6px">` : ""}
+      ${place.note || ""}<br>
+      ${
+        place.address
+          ? `<a href="#" onclick="openGoogle(${place.lat},${place.lng})">
+               📍 ${place.address}
+             </a><br>`
+          : ""
+      }
+      ${
+        place.photo
+          ? `<img src="${place.photo}" style="width:100%;border-radius:10px;margin-top:6px">`
+          : ""
+      }
+      <br><br>
+      <button onclick="openGoogle(${place.lat},${place.lng})">🧭 Google Maps</button>
+      <button onclick="openWaze(${place.lat},${place.lng})">🚗 Waze</button>
     `);
 }
 
@@ -95,11 +112,15 @@ function renderList() {
       ${p.note || ""}
       ${p.photo ? `<img src="${p.photo}">` : ""}
       <br>
-      <button class="btn" onclick="toggleVisited(${p.id})">
-        ${p.visited ? "💙 Visitado" : "🤍 Marcar visitado"}
+      <button class="btn-visit" onclick="toggleVisited(${p.id})">
+        ${p.visited ? "❤️ Visitado juntos" : "🤍 Marcar visitado"}
       </button>
-      <button class="btn-route" onclick="openRoute(${p.lat},${p.lng})">🧭 Ruta</button>
-      <button class="btn-danger" onclick="removePlace(${p.id})">❌</button>
+      <button class="btn-route" onclick="openGoogle(${p.lat},${p.lng})">
+        🧭 Ruta
+      </button>
+      <button class="btn-danger" onclick="removePlace(${p.id})">
+        ❌
+      </button>
     `;
     listDiv.appendChild(div);
   });
@@ -119,9 +140,16 @@ function removePlace(id) {
   location.reload();
 }
 
-function openRoute(lat, lng) {
+function openGoogle(lat, lng) {
   window.open(
     `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
+    "_blank"
+  );
+}
+
+function openWaze(lat, lng) {
+  window.open(
+    `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`,
     "_blank"
   );
 }
